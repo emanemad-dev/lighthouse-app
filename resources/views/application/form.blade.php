@@ -109,6 +109,10 @@
             font-size: 0.85rem;
             margin-top: 0.25rem;
         }
+
+        .is-invalid {
+            border-color: red !important;
+        }
     </style>
 </head>
 
@@ -127,19 +131,19 @@
             <div class="mb-3">
                 <label>Email</label>
                 <input type="email" name="contact_email" class="form-control" required>
-                <div class="error-msg" id="emailError"></div>
+                <div class="error-msg" id="contact_emailError"></div>
             </div>
 
             <div class="mb-3">
                 <label>Phone (International)</label>
                 <input type="text" name="contact_phone" class="form-control" required>
-                <div class="error-msg" id="phoneError"></div>
+                <div class="error-msg" id="contact_phoneError"></div>
             </div>
 
             <div class="mb-3">
                 <label>Date of Birth</label>
                 <input type="date" name="date_of_birth" class="form-control" required>
-                <div class="error-msg" id="dobError"></div>
+                <div class="error-msg" id="date_of_birthError"></div>
             </div>
 
             <div class="mb-3">
@@ -216,6 +220,7 @@
         $('#applicationForm').on('submit', function(e) {
             e.preventDefault();
             $('.error-msg').text('');
+            $('input, select, textarea').removeClass('is-invalid');
 
             let formData = new FormData(this);
             selectedFiles.forEach(file => formData.append('files[]', file));
@@ -253,6 +258,7 @@
                         let errors = xhr.responseJSON.errors;
                         for(const key in errors){
                             $(`#${key}Error`).text(errors[key][0]);
+                            $(`[name="${key}"]`).addClass('is-invalid');
                         }
                     } else {
                         responseBox.removeClass('d-none alert-success')
